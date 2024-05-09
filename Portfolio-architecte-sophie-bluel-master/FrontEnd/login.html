@@ -11,11 +11,11 @@
       rel="stylesheet"
     />
     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-    integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <meta name="description" content="" />
     <link rel="stylesheet" href="./assets/style.css" />
@@ -36,14 +36,26 @@
     <main>
       <section id="login">
         <form class="loginForm">
-            <h2>Log In</h2>
+          <h2>Log In</h2>
           <div class="formGroup">
             <label for="email">Email</label>
-            <input type="text" id="email" name="email" required onfocus="removeError()"/>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              required
+              onfocus="removeError()"
+            />
           </div>
           <div class="formGroup">
             <label for="password">Mot de passe</label>
-            <input type="password" id="password" name="password" required onfocus="removeError()"/>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              onfocus="removeError()"
+            />
           </div>
           <div class="errorMessage">
             <span>Email ou mot de passe erroné</span>
