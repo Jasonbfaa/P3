@@ -137,13 +137,36 @@ function displayEditButton() {
     closeModalBtn.className = "close-modal-btn";
     closeModalBtn.textContent = "×";
 
+    // Créer un nouvel élément de titre de niveau 2
     const modalTitle = document.createElement("h2");
+    // Ajouter du texte au titre
     modalTitle.textContent = "Galerie Photo";
+
+    // Ajouter une classe au titre pour appliquer les styles CSS
+    modalTitle.classList.add("modal-title");
+
+    // Ajouter le titre à la modalContent (supposons que modalContent existe)
+    modalContent.appendChild(modalTitle);
+
+    const modalGallery = document.createElement("div");
+    modalGallery.className = "modal-gallery";
+
+    // Ajouter les images à la galerie de la modal
+    allWorks.forEach((work) => {
+      const figure = document.createElement("figure");
+      const image = document.createElement("img");
+
+      image.src = work.imageUrl;
+      image.alt = work.title;
+
+      figure.appendChild(image);
+      modalGallery.appendChild(figure);
+    });
 
     // Construction de la modal
     modalContent.appendChild(closeModalBtn);
     modalContent.appendChild(modalTitle);
-
+    modalContent.appendChild(modalGallery);
     modalOverlay.appendChild(modalContent);
     document.body.appendChild(modalOverlay);
 

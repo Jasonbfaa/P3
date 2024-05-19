@@ -295,6 +295,16 @@ footer nav ul {
 
 /* Styles pour la modal */
 
+.modal-title {
+  color: #000;
+  text-align: center;
+  font-family: "Work Sans";
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
 .modal-overlay {
   display: none;
   position: fixed;
@@ -331,4 +341,27 @@ footer nav ul {
 
 .close-modal-btn:hover {
   color: #000;
+}
+
+.modal-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+  overflow-y: auto;
+}
+
+.modal-gallery figure {
+  margin: 0;
+}
+
+.modal-gallery img {
+  width: 100%;
+  height: auto;
+}
+
+.modal-gallery figcaption {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
 }
