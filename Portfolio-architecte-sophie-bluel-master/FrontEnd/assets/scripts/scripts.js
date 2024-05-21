@@ -179,6 +179,15 @@ function displayEditButton() {
       // Supprimer la modal du DOM
       document.body.removeChild(modalOverlay);
     });
+
+    // Gérer la fermeture de la modal lorsqu'on clique en dehors de la modal
+    modalOverlay.addEventListener("click", function (event) {
+      if (event.target === modalOverlay) {
+        modalOverlay.style.display = "none";
+        // Supprimer la modal du DOM
+        document.body.removeChild(modalOverlay);
+      }
+    });
   });
 
   // Ajouter le lien "Modifier" à la section du portfolio
@@ -192,4 +201,45 @@ function displayEditButton() {
 // Appeler la fonction une fois que le DOM est chargé
 document.addEventListener("DOMContentLoaded", function () {
   displayEditButton();
+});
+
+function addDeleteButtonsToModal() {
+  const modalGallery = document.querySelector(".modal-gallery");
+
+  if (modalGallery) {
+    modalGallery.querySelectorAll("figure").forEach((figure, index) => {
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑️"; // Icône de poubelle
+      deleteBtn.className = "delete-btn";
+      deleteBtn.dataset.index = index;
+
+      figure.appendChild(deleteBtn);
+
+      // Ajouter un gestionnaire d'événements pour supprimer l'image
+      deleteBtn.addEventListener("click", function () {
+        // Supprimer l'élément du DOM
+        figure.remove();
+        // Optionnel: Ajouter une requête pour supprimer l'image du serveur
+        // fetch(`http://localhost:5678/api/works/${allWorks[index].id}`, { method: 'DELETE' });
+      });
+    });
+  }
+}
+
+// Appeler cette fonction lorsque la modale est affichée
+document.addEventListener("DOMContentLoaded", function () {
+  // Ajout d'un observateur de mutation pour détecter quand la modale est ajoutée au DOM
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.addedNodes.length) {
+        mutation.addedNodes.forEach((node) => {
+          if (node.classList && node.classList.contains("modal-overlay")) {
+            addDeleteButtonsToModal();
+          }
+        });
+      }
+    });
+  });
+
+  observer.observe(document.body, { childList: true });
 });
