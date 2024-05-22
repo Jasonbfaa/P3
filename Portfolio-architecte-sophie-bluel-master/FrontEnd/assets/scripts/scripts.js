@@ -126,7 +126,7 @@ function displayEditButton() {
   editLink.textContent = "Modifier";
 
   editLink.addEventListener("click", function () {
-    // Création de la modal
+    //Création de la modal (couper en function)
     const modalOverlay = document.createElement("div");
     modalOverlay.className = "modal-overlay";
 
@@ -151,7 +151,7 @@ function displayEditButton() {
     const modalGallery = document.createElement("div");
     modalGallery.className = "modal-gallery";
 
-    // Ajouter les images à la galerie de la modal
+    //Ajouter les images à la galerie de la modal (couper en function)
     allWorks.forEach((work) => {
       const figure = document.createElement("figure");
       const image = document.createElement("img");
@@ -224,6 +224,51 @@ function addDeleteButtonsToModal() {
       });
     });
   }
+}
+
+// Function to delete a work
+
+function deleteWork(workId) {
+  fetch(`http://localhost:5678/api/works/${workId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${userToken}`,
+    },
+  }).then(() => {
+    allWorks = allWorks.filter(
+      (element) => parseInt(element.id) !== parseInt(workId)
+    );
+    figure.remove();
+    displayWorks(allWorks);
+  });
+}
+
+//Ajout d'un travail
+
+function sendWork(image, titre, category) {
+  const formData = new formData();
+  formData.append("image", image);
+  formData.append("tittle", titre);
+  formData.append("category", category);
+  fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    Headers: {
+      Autorization: "Bearer ${userToken}",
+    },
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      allWorks.push(data);
+      displayWorks(allWorks);
+    })
+    .catch((error) => {
+      console.error(
+        "Une erreur est survenue lors de la création du work:",
+        error
+      );
+    });
 }
 
 // Appeler cette fonction lorsque la modale est affichée
