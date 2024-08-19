@@ -29,13 +29,6 @@ function displayWorks(allWorks) {
 getWorks();
 displayFilterButtons();
 
-/*const boutonObjet = document.querySelector(".btn-objet");
-    
-    boutonObjet.addEventListener("click", function () {
-        const objetGallery = objet.filter();
-
-    });*/
-
 /* Cette fonction récupère la liste des catégories */
 async function getCategories(event) {
   try {
@@ -63,6 +56,7 @@ async function displayFilterButtons() {
     sectionFilter.appendChild(categoryBtn);
   }
 }
+
 function filterWorks(catId) {
   let categoryId = catId;
   if (!isNaN(parseInt(categoryId))) {
@@ -126,68 +120,7 @@ function displayEditButton() {
   editLink.textContent = "Modifier";
 
   editLink.addEventListener("click", function () {
-    //Création de la modal (couper en function)
-    const modalOverlay = document.createElement("div");
-    modalOverlay.className = "modal-overlay";
-
-    const modalContent = document.createElement("div");
-    modalContent.className = "modal-content";
-
-    const closeModalBtn = document.createElement("span");
-    closeModalBtn.className = "close-modal-btn";
-    closeModalBtn.textContent = "×";
-
-    // Créer un nouvel élément de titre de niveau 2
-    const modalTitle = document.createElement("h2");
-    // Ajouter du texte au titre
-    modalTitle.textContent = "Galerie Photo";
-
-    // Ajouter une classe au titre pour appliquer les styles CSS
-    modalTitle.classList.add("modal-title");
-
-    // Ajouter le titre à la modalContent (supposons que modalContent existe)
-    modalContent.appendChild(modalTitle);
-
-    const modalGallery = document.createElement("div");
-    modalGallery.className = "modal-gallery";
-
-    //Ajouter les images à la galerie de la modal (couper en function)
-    allWorks.forEach((work) => {
-      const figure = document.createElement("figure");
-      const image = document.createElement("img");
-
-      image.src = work.imageUrl;
-      image.alt = work.title;
-
-      figure.appendChild(image);
-      modalGallery.appendChild(figure);
-    });
-
-    // Construction de la modal
-    modalContent.appendChild(closeModalBtn);
-    modalContent.appendChild(modalTitle);
-    modalContent.appendChild(modalGallery);
-    modalOverlay.appendChild(modalContent);
-    document.body.appendChild(modalOverlay);
-
-    // Afficher la modal
-    modalOverlay.style.display = "block";
-
-    // Gérer la fermeture de la modal lorsqu'on clique sur le bouton de fermeture
-    closeModalBtn.addEventListener("click", function () {
-      modalOverlay.style.display = "none";
-      // Supprimer la modal du DOM
-      document.body.removeChild(modalOverlay);
-    });
-
-    // Gérer la fermeture de la modal lorsqu'on clique en dehors de la modal
-    modalOverlay.addEventListener("click", function (event) {
-      if (event.target === modalOverlay) {
-        modalOverlay.style.display = "none";
-        // Supprimer la modal du DOM
-        document.body.removeChild(modalOverlay);
-      }
-    });
+    displayGalleryModal(); // Affiche la modal de la galerie
   });
 
   // Ajouter le lien "Modifier" à la section du portfolio
@@ -202,6 +135,193 @@ function displayEditButton() {
 document.addEventListener("DOMContentLoaded", function () {
   displayEditButton();
 });
+
+function displayGalleryModal() {
+  const modalOverlay = document.createElement("div");
+  modalOverlay.className = "modal-overlay";
+
+  const modalContent = document.createElement("div");
+  modalContent.className = "modal-content";
+
+  const closeModalBtn = document.createElement("span");
+  closeModalBtn.className = "close-modal-btn";
+  closeModalBtn.textContent = "×";
+
+  const modalTitle = document.createElement("h2");
+  modalTitle.textContent = "Galerie Photo";
+  modalTitle.classList.add("modal-title");
+
+  const modalGallery = document.createElement("div");
+  modalGallery.className = "modal-gallery";
+
+  // Ajouter les images à la galerie de la modal
+  allWorks.forEach((work) => {
+    const figure = document.createElement("figure");
+    const image = document.createElement("img");
+
+    image.src = work.imageUrl;
+    image.alt = work.title;
+
+    figure.appendChild(image);
+    modalGallery.appendChild(figure);
+  });
+
+  // Construction de la modal
+  modalContent.appendChild(closeModalBtn);
+  modalContent.appendChild(modalTitle);
+  modalContent.appendChild(modalGallery);
+
+  // Ajouter le bouton "Ajouter une photo"
+  const addPhotoBtn = document.createElement("button");
+  addPhotoBtn.textContent = "Ajouter une photo";
+  addPhotoBtn.className = "add-photo-btn";
+  modalContent.appendChild(addPhotoBtn);
+
+  modalOverlay.appendChild(modalContent);
+  document.body.appendChild(modalOverlay);
+
+  // Afficher la modal
+  modalOverlay.style.display = "block";
+
+  // Gérer la fermeture de la modal lorsqu'on clique sur le bouton de fermeture
+  closeModalBtn.addEventListener("click", function () {
+    modalOverlay.style.display = "none";
+    document.body.removeChild(modalOverlay);
+  });
+
+  // Gérer la fermeture de la modal lorsqu'on clique en dehors de la modal
+  modalOverlay.addEventListener("click", function (event) {
+    if (event.target === modalOverlay) {
+      modalOverlay.style.display = "none";
+      document.body.removeChild(modalOverlay);
+    }
+  });
+
+  // Ajoute l'événement pour le bouton "Ajouter une photo"
+  addPhotoBtn.addEventListener("click", function () {
+    modalOverlay.style.display = "none"; // Ferme la première modal
+    displayAddPhotoModal(); // Ouvre la modal pour ajouter une photo
+  });
+
+  // Ajouter les boutons de suppression dans la modal de la galerie
+  addDeleteButtonsToModal();
+}
+
+function displayAddPhotoModal() {
+  // Créer la nouvelle modal pour l'ajout de photo
+  const modalOverlay = document.createElement("div");
+  modalOverlay.className = "modal-overlay";
+
+  const modalContent = document.createElement("div");
+  modalContent.className = "modal-content";
+
+  const closeModalBtn = document.createElement("span");
+  closeModalBtn.className = "close-modal-btn";
+  closeModalBtn.textContent = "×";
+
+  const backBtn = document.createElement("span"); // Flèche de retour
+  backBtn.className = "back-btn";
+  backBtn.textContent = "←"; // Symbole de flèche gauche
+
+  const modalTitle = document.createElement("h2");
+  modalTitle.textContent = "Ajouter une photo";
+  modalTitle.classList.add("modal-title");
+
+  // Formulaire d'ajout de photo
+  const form = document.createElement("form");
+  form.className = "add-photo-form";
+
+  const imageInput = document.createElement("input");
+  imageInput.type = "file";
+  imageInput.name = "image";
+  imageInput.accept = "image/*";
+  form.appendChild(imageInput);
+
+  const titleInput = document.createElement("input");
+  titleInput.type = "text";
+  titleInput.name = "title";
+  titleInput.placeholder = "Titre de la photo";
+  form.appendChild(titleInput);
+
+  const categoryInput = document.createElement("select");
+  categoryInput.name = "category";
+  // Remplir les options de catégorie ici
+  form.appendChild(categoryInput);
+
+  const submitBtn = document.createElement("button");
+  submitBtn.type = "submit";
+  submitBtn.textContent = "Ajouter";
+  form.appendChild(submitBtn);
+
+  modalContent.appendChild(closeModalBtn);
+  modalContent.appendChild(backBtn);
+  modalContent.appendChild(modalTitle);
+  modalContent.appendChild(form);
+  modalOverlay.appendChild(modalContent);
+  document.body.appendChild(modalOverlay);
+
+  // Afficher la modal d'ajout de photo
+  modalOverlay.style.display = "block";
+
+  // Gérer la fermeture de la modal lorsqu'on clique sur le bouton de fermeture
+  closeModalBtn.addEventListener("click", function () {
+    modalOverlay.style.display = "none";
+    document.body.removeChild(modalOverlay);
+  });
+
+  // Gérer la fermeture de la modal lorsqu'on clique en dehors de la modal
+  modalOverlay.addEventListener("click", function (event) {
+    if (event.target === modalOverlay) {
+      modalOverlay.style.display = "none";
+      document.body.removeChild(modalOverlay);
+    }
+  });
+
+  // Gérer le clic sur la flèche de retour
+  backBtn.addEventListener("click", function () {
+    modalOverlay.style.display = "none"; // Ferme la modal d'ajout de photo
+    document.body.removeChild(modalOverlay);
+    displayGalleryModal(); // Réaffiche la modal de la galerie
+  });
+
+  // Gérer l'envoi du formulaire
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const image = imageInput.files[0];
+    const title = titleInput.value;
+    const category = categoryInput.value;
+
+    sendWork(image, title, category);
+    modalOverlay.style.display = "none";
+    document.body.removeChild(modalOverlay);
+  });
+}
+
+async function sendWork(image, title, category) {
+  const formData = new FormData();
+  formData.append("image", image);
+  formData.append("title", title);
+  formData.append("category", category);
+
+  try {
+    const response = await fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${window.sessionStorage.getItem("token")}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // Recharger la liste des travaux après l'ajout
+    getWorks();
+  } catch (error) {
+    console.error("Erreur lors de l'ajout du travail", error);
+  }
+}
 
 function addDeleteButtonsToModal() {
   const modalGallery = document.querySelector(".modal-gallery");
@@ -224,51 +344,6 @@ function addDeleteButtonsToModal() {
       });
     });
   }
-}
-
-// Function to delete a work
-
-function deleteWork(workId) {
-  fetch(`http://localhost:5678/api/works/${workId}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${userToken}`,
-    },
-  }).then(() => {
-    allWorks = allWorks.filter(
-      (element) => parseInt(element.id) !== parseInt(workId)
-    );
-    figure.remove();
-    displayWorks(allWorks);
-  });
-}
-
-//Ajout d'un travail
-
-function sendWork(image, titre, category) {
-  const formData = new formData();
-  formData.append("image", image);
-  formData.append("tittle", titre);
-  formData.append("category", category);
-  fetch("http://localhost:5678/api/works", {
-    method: "POST",
-    Headers: {
-      Autorization: "Bearer ${userToken}",
-    },
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      allWorks.push(data);
-      displayWorks(allWorks);
-    })
-    .catch((error) => {
-      console.error(
-        "Une erreur est survenue lors de la création du work:",
-        error
-      );
-    });
 }
 
 // Appeler cette fonction lorsque la modale est affichée
